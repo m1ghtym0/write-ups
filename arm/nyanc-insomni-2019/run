@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+usage() { echo "Usage: ${FUNCNAME[1]} $1" && return 0; }
+
+[[ $# -ne 2 ]] && usage "<levelXX> <port>" && exit 1
+
+socat tcp-l:"$2",fork,reuseaddr EXEC:"stdbuf -o0 ./$1"
+#socat tcp-l:"$2",fork,reuseaddr EXEC:"strace -v ./$1"
+#socat tcp-l:"$2",fork,reuseaddr EXEC:"gdbserver ':1234' ./$1"
