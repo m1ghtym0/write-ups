@@ -12,8 +12,8 @@ Challenge runs on ubuntu 18.04 aarch64, chrooted
 
 See `vm/README.md`
 
-If you want aarch64 debugging in you gdb, see [get_gdb.sh](get_gdb.sh) or run your own setup.
-If you're rocking my gdbserver setup try:
+If you want aarch64 debugging in your gdb, see [get_gdb.sh](get_gdb.sh) or run your own setup.
+If you're rocking the gdbserver setup from the Readme try:
 
 ```
 ./gdb -ex "target remote :1234"
@@ -26,7 +26,7 @@ Reverse the challenge yourself to get an understanding of what's happening.
 The problem is that we can allocate chunks of size 0, however when reading the content,
 it reads `size-1 = -1` many bytes.
 This will cause read to fail, but store a 16-bit unsigned representation of this size `0xffff` as the length.
-This gives us an overwrite when modifying the chunks content.
+This gives us an overwrite when subsequently modifying the chunks content.
 
 ## Exploit
 
