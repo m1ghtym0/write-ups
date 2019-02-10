@@ -13,11 +13,12 @@ The challenge was created for the latest firefox version during 33c3 CTF (Decemb
 You can download the release [here](https://ftp.mozilla.org/pub/firefox/releases/50.1.0/source/firefox-50.1.0.source.tar.xz)
 
 I had to fix a small issue in their build system, which you can find in build/icu.patch
-If you want to use the debug build the following assertions in `js/src/vm/SelfHosting.cp` are stopping the exploit, therefore, I created the build/debug.patch to remove them.
+If you want to use the debug build the `#ifdef DEBUG` assertions in `js/src/vm/SelfHosting.cpp` are stopping the exploit.
+I created the build/debug.patch to remove them.
 
 You can find the resulting build-script in [build/build.sh](build/build.sh).
 
-For the exploit development I've build a standalone js-shell as well, [here](https://github.com/m1ghtym0/browser-pwn#spidermonkey) you can find a build instruction.
+For the exploit development I've build a standalone js-shell as well, [here](https://github.com/m1ghtym0/browser-pwn#spidermonkey) you can find the build instructions.
 
 ## Run
 
@@ -28,10 +29,11 @@ cd build/firefox-50.1.0.source
 
 ## Vuln
 
-The [patch](build/feuerfuchs.patch) adds a length and offset setter to TypedArray implementation, however correct bounds checks are performed and their values adjusted accordingly.
+The [patch](build/feuerfuchs.patch) adds a length and offset setter to the TypedArray implementation.
+Both setters ensure the integrity of the underlying ArrayBuffer bounds.
 The TypedArray implementation is written in C++ and you can find it in `js/src/vm/TypedArrayObject(.cpp|.h)`.
-We can check the builtin TypedArray functions if these setters break any of their assumptions specifically regarding the size and bounds checks.
-Interesting candidates are `TypedArraySlice` and `TypedArrayCopyWithin`.
+We can check in the builtin TypedArray functions if these setters break any of their assumptions specifically regarding the size and bounds checks.
+Interesting candidates are for example `TypedArraySlice` and `TypedArrayCopyWithin`.
 In both cases `toInteger` is called on the `start` and `end` parameters, which would allow us to subsequently modify the length and offset.
 However, `TypedArraySlice` is only operating on the JavaScript object and does not give us an out-of-bounds access.
 `TypedArrayCopyWithin` on the other hand calls the `MoveTypedArrayElements`, which is implemented in C++.
@@ -120,8 +122,8 @@ Consequently, the resulting memmove gives us an out of bounds memory access.
 
 ## Exploit
 
-See the anotated [pwn.js](pwn.js).
-In the firefox source dir run `./mach run` and open the [pwn.html](pwn.html) file.
+See the annotated [pwn.js](pwn.js).
+Execute it by running `./mach run` and open the [pwn.html](pwn.html) file.
 
 
 
