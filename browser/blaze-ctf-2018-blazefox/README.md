@@ -4,8 +4,8 @@ Blazectf 2018 Blazefox
 This challenge was created by  itszn.
 The purpose of this repo is just to reproduce the exploit for the sake of learning more about JavaScript-Engine exploitation.
 
-*   [files](mightym0.de/write-ups/browser/blazectf-2018-blazefox/blaze_firefox_small.tar.gz)
-*   [binaries](mightym0.de/write-ups/browser/blazectf-2018-blazefox/blaze_firefox_dist_large.tar.gz)
+*   [files](https://mightym0.de/write-ups/browser/blazectf-2018-blazefox/blaze_firefox_small.tar.gz)
+*   [binaries](https://mightym0.de/write-ups/browser/blazectf-2018-blazefox/blaze_firefox_dist_large.tar.gz)
 
 ## Build Vuln-JSC (Ubuntu 18.04)
 
